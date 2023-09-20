@@ -1,0 +1,97 @@
+substitutions:
+  name: smartplug
+  friendly_name: SmartPlug
+
+esphome:
+  name: ${name}
+  friendly_name: ${friendly_name}
+  name_add_mac_suffix: true
+
+  project: 
+    name: greyteardrop.maxus-briowhead-plug
+    version: "1.0.0"
+
+dashboard_import:
+  package_import_url: github://GreyTeardrop/esphome-devices/maxussmart_brio-w-head16_plug.yaml
+  import_full_config: false
+
+preferences:
+  flash_write_interval: 1min
+
+esp8266:
+  board: esp01_1m
+  restore_from_flash: true
+
+wifi:
+  ap:
+    password: "61934149"
+
+captive_portal:
+
+logger:
+  level: DEBUG
+
+api:
+
+ota:
+
+switch:
+  - platform: gpio
+    name: None
+    id: relay
+    pin: GPIO15
+    restore_mode: RESTORE_DEFAULT_ON
+    on_turn_on:
+      - light.turn_on: status_light
+    on_turn_off:
+      - light.turn_off: status_light
+
+binary_sensor:
+  - platform: gpio
+    id: relay_toggle
+    pin: GPIO13
+    on_press:
+      - switch.toggle: relay
+
+sensor:
+  - platform: hlw8012
+    model: BL0937
+    sel_pin:
+      number: GPIO12
+      inverted: true
+    cf_pin: GPIO5
+    cf1_pin: GPIO14
+    voltage_divider: 2066
+    change_mode_every: 2
+    update_interval: 10s
+    current:
+      name: Current
+    voltage:
+      name: Voltage
+    power:
+      name: Power
+    energy:
+      name: Energy
+
+  - platform: wifi_signal
+    name: WiFi Signal
+    update_interval: 60s
+    entity_category: diagnostic
+    disabled_by_default: true
+
+light:
+  - platform: status_led
+    id: status_light
+    name: Status LED
+    pin:
+      number: GPIO2
+      inverted: true
+
+time:
+  - platform: homeassistant
+    id: time_source
+
+button:
+  - platform: factory_reset
+    name: Reset to Factory Settings
+    disabled_by_default: true
