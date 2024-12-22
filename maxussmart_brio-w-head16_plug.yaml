@@ -7,9 +7,9 @@ esphome:
   friendly_name: ${friendly_name}
   name_add_mac_suffix: true
 
-  project: 
+  project:
     name: greyteardrop.maxus-briowhead-plug
-    version: "1.0.0"
+    version: "2.0.0"
 
 dashboard_import:
   package_import_url: github://GreyTeardrop/esphome-devices/maxussmart_brio-w-head16_plug.yaml
@@ -34,6 +34,7 @@ logger:
 api:
 
 ota:
+  platform: esphome
 
 switch:
   - platform: gpio
